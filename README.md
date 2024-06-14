@@ -51,6 +51,21 @@ full database synchronization, sharding table synchronization, schema evolution 
       fenodes: 127.0.0.1:8030
       username: root
       password: pass
+      
+    transform:
+    - source-table: adb.web_order01
+      projection: \*, UPPER(product_name) as product_name
+      filter: id > 10 AND order_id > 100
+      description: project fields and filter
+    - source-table: adb.web_order02
+      projection: \*, UPPER(product_name) as product_name
+      filter: id > 20 AND order_id > 200
+      description: project fields and filter  
+
+    route:
+    - source-table: adb.web_order\.*
+      sink-table: adb.ods_web_orders
+      description: sync sharding tables to one destination table
     
     pipeline:
        name: MySQL to Doris Pipeline
@@ -63,7 +78,7 @@ full database synchronization, sharding table synchronization, schema evolution 
 5. View job execution status through Flink WebUI or downstream database.
 
 Try it out yourself with our more detailed [tutorial](docs/content/docs/get-started/quickstart/mysql-to-doris.md). 
-You can also see [connector overview](docs/content/docs/connectors/overview.md) to view a comprehensive catalog of the
+You can also see [connector overview](docs/content/docs/connectors/pipeline-connectors/overview.md) to view a comprehensive catalog of the
 connectors currently provided and understand more detailed configurations.
 
 
