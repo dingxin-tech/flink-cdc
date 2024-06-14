@@ -21,7 +21,11 @@ import org.apache.flink.cdc.common.schema.Schema;
 
 import java.io.Serializable;
 
-/** use for PrePartitionOperator. */
+/**
+ * Provide {@link HashFunction} to help PrePartitionOperator to shuffle DataChangeEvent to
+ * designated subtask. This is usually beneficial for load balancing, when writing to different
+ * partitions/buckets in {@link DataSink}, add custom Implementation to further improve efficiency.
+ */
 public interface HashFunctionProvider extends Serializable {
     HashFunction getHashFunction(Schema schema);
 }
