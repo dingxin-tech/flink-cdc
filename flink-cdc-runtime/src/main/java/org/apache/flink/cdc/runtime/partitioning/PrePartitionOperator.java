@@ -73,6 +73,7 @@ public class PrePartitionOperator extends AbstractStreamOperator<PartitioningEve
                 getContainingTask().getEnvironment().getOperatorCoordinatorEventGateway();
         schemaEvolutionClient = new SchemaEvolutionClient(toCoordinator, schemaOperatorId);
         cachedHashFunctions = createCache();
+        hashFunctionProvider.open();
     }
 
     @Override
@@ -127,7 +128,7 @@ public class PrePartitionOperator extends AbstractStreamOperator<PartitioningEve
     }
 
     private HashFunction recreateHashFunction(TableId tableId) {
-        return hashFunctionProvider.getHashFunction(loadLatestSchemaFromRegistry(tableId));
+        return hashFunctionProvider.getHashFunction(tableId, loadLatestSchemaFromRegistry(tableId));
     }
 
     private LoadingCache<TableId, HashFunction> createCache() {
@@ -140,5 +141,11 @@ public class PrePartitionOperator extends AbstractStreamOperator<PartitioningEve
                                 return recreateHashFunction(key);
                             }
                         });
+    }
+
+    @Override
+    public void close() throws Exception {
+        super.close();
+        hashFunctionProvider.close();
     }
 }

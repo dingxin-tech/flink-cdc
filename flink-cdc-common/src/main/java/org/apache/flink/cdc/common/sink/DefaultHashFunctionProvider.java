@@ -33,7 +33,7 @@ public class DefaultHashFunctionProvider implements HashFunctionProvider {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public HashFunction getHashFunction(Schema schema) {
+    public HashFunction getHashFunction(TableId tableId, Schema schema) {
         return new DefaultHashFunction(schema);
     }
 

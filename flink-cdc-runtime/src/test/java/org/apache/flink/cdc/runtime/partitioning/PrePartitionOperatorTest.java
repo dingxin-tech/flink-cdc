@@ -128,7 +128,9 @@ class PrePartitionOperatorTest {
     }
 
     private int getPartitioningTarget(Schema schema, DataChangeEvent dataChangeEvent) {
-        return new DefaultHashFunctionProvider().getHashFunction(schema).apply(dataChangeEvent)
+        return new DefaultHashFunctionProvider()
+                        .getHashFunction(null, schema)
+                        .apply(dataChangeEvent)
                 % DOWNSTREAM_PARALLELISM;
     }
 

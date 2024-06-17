@@ -17,6 +17,7 @@
 
 package org.apache.flink.cdc.common.sink;
 
+import org.apache.flink.cdc.common.event.TableId;
 import org.apache.flink.cdc.common.schema.Schema;
 
 import java.io.Serializable;
@@ -27,5 +28,12 @@ import java.io.Serializable;
  * partitions/buckets in {@link DataSink}, add custom Implementation to further improve efficiency.
  */
 public interface HashFunctionProvider extends Serializable {
-    HashFunction getHashFunction(Schema schema);
+    HashFunction getHashFunction(TableId tableId, Schema schema);
+
+    // --------------------------------------------------------------------------------------------
+    //  Default life cycle methods
+    // --------------------------------------------------------------------------------------------
+    default void open() {}
+
+    default void close() {}
 }
